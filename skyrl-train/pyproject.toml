@@ -41,7 +41,8 @@ dependencies = [
     # causal-conv1d installed separately via fleet-qwen35-extra-setup.sh (requires nvcc)
     "flash-linear-attention",
     "polars",
-    "s3fs",
+    "fsspec==2026.2.0",
+    "s3fs==2025.3.0",
     "fastapi",
     "uvicorn",
     "pybind11",
