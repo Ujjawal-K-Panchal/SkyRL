@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Qwen3.5-specific dependencies (sourced by fleet-common-setup.sh via --extra-setup)
 #
-# Installs: transformers 5.3.0, flash-attn 2.8.3 wheel, CUDA toolkit (nvcc)
+# Installs: transformers 5.3.0, flash-attn 2.8.3 wheel, CUDA toolkit (nvcc), causal-conv1d
 # Writes: $HOME/.cuda_env (sourced at run time for FlashInfer JIT)
 
 # Upgrade transformers to 5.3.0 for Qwen3.5-MoE (model_type=qwen3_5_moe).
@@ -50,6 +50,13 @@ echo "CUDA_HOME=$CUDA_HOME"
 # Write cuda_env for run phase (fleet-common-run.sh sources this via --cuda-env)
 echo "export CUDA_HOME=$CUDA_HOME" > "$HOME/.cuda_env"
 echo "export PATH=$CUDA_HOME/bin:\$PATH" >> "$HOME/.cuda_env"
+
+# causal-conv1d: required for GatedDeltaNet fast CUDA kernels in Qwen3.5-MoE.
+# Without it, fla-core falls back to a naive PyTorch implementation that crashes
+# with cudaErrorIllegalAddress on multi-node FSDP2 (Xid 31 MMU fault).
+# Must be built from source (needs nvcc + g++) — install AFTER CUDA toolkit setup.
+uv pip install "causal-conv1d>=1.6.0"
+python -c "import causal_conv1d; print(f'causal-conv1d OK: {causal_conv1d.__version__}')"
 
 # Verify pinned packages survived dependency resolution
 python -c "import transformers; assert transformers.__version__ == '5.3.0', f'Expected 5.3.0 got {transformers.__version__}'"
