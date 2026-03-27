@@ -11,7 +11,8 @@
 set -euo pipefail
 
 # Export RUN_NAME so task_gen_env can tag rollout dumps
-export RUN_NAME="task_gen_${RUN_ID:-$(head -c 4 /dev/urandom | xxd -p)}"
+# Always use random hex suffix for unique run names
+export RUN_NAME="task_gen_$(python3 -c 'import os; print(os.urandom(4).hex())')"
 
 # Task-gen GRPO training via shared run script
 # --entrypoint: task-gen entrypoint (not main_fleet)

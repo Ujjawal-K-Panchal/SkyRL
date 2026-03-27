@@ -4,7 +4,7 @@
 # MoE: 35B total, 3B active (256 experts, 9 active/token). GatedDeltaNet architecture.
 # 262K native context. All 35B params in memory (~70GB fp16), optimizer ~140GB, gradients ~70GB.
 #
-# Multi-node (2-node default, 16 GPUs total): 8x B200/H200 per node
+# Multi-node (2-node default, 16 GPUs total): 8x H200 per node
 # NOTE: Requires vLLM >= 0.17.0 for native Qwen3.5/GDN support + FlashAttention 4
 
 name: fleet-task-grpo-qwen3-5-35b
@@ -13,22 +13,21 @@ resources:
   disk_size: 750
   memory: 1500+
   ports: 6479
-  # 35B MoE requires B200 (192GB) — OOMs on H200 (141GB) during FSDP training
   any_of:
-    - accelerators: B200:8
-      cloud: kubernetes
-      network_tier: best
-      use_spot: true
-    - accelerators: B200:8
-      cloud: runpod
-    - accelerators: B200:8
-      cloud: lambda
-    - accelerators: B200:8
-      cloud: nebius
-    - accelerators: B200:8
+    - accelerators: H200:8
       cloud: gcp
       use_spot: true
       image_id: projects/deeplearning-platform-release/global/images/common-cu128-ubuntu-2204-nvidia-570-v20260305
+    - accelerators: H200:8
+      cloud: kubernetes
+      network_tier: best
+      use_spot: true
+    - accelerators: H200:8
+      cloud: runpod
+    - accelerators: H200:8
+      cloud: lambda
+    - accelerators: H200:8
+      cloud: nebius
 
 num_nodes: 2
 
