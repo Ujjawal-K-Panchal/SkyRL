@@ -88,7 +88,8 @@ source .venv/bin/activate
 # FlashAttention 4, and PyTorch 2.10.0
 uv sync --extra vllm
 uv pip install wandb boto3 awscli
-uv pip install "litellm>=1.75.5" fleet-python logfire "mcp>=1.0.0"
+# Pin fleet-python<=0.2.119: 0.2.120+ has async BaseWrapper bug (missing jwt/team_id params)
+uv pip install "litellm>=1.75.5" "fleet-python<=0.2.119" logfire "mcp>=1.0.0"
 
 # --- Extra pip packages (installed before extra-setup to avoid dependency downgrades) ---
 if [ -n "$EXTRA_PIP" ]; then

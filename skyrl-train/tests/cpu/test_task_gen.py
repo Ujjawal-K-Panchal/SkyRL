@@ -17,6 +17,13 @@ import pytest
 
 SKYRL_GYM_AVAILABLE = importlib.util.find_spec("skyrl_gym") is not None
 
+
+@pytest.fixture(autouse=True)
+def _rollout_tmpdir(tmp_path, monkeypatch):
+    """Redirect rollout dir to a temp path so tests don't need /workspace."""
+    monkeypatch.setenv("ROLLOUT_DIR", str(tmp_path / "rollouts"))
+
+
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
@@ -668,6 +675,8 @@ class TestTaskGenEnvMultiTurn:
     def test_step_async_query_db(self):
         """query_db tool call should execute and return results."""
         env = self._make_env(max_turns=5)
+        # Satisfy exploration sequence: describe_db must be called before query_db
+        env.called_describe_db = True
 
         mock_orch = MagicMock()
         mock_orch.query_db_async = AsyncMock(
@@ -699,6 +708,10 @@ class TestTaskGenEnvMultiTurn:
         result1 = asyncio.run(env.step_async('<tool_call>{"name": "describe_db", "arguments": {}}</tool_call>'))
         assert result1["done"] is False
         assert env.turns == 1
+
+        # Satisfy exploration sequence gate (describe_db + query_db + env tool)
+        env.called_query_db = True
+        env.mcp_tool_calls = 1
 
         # Turn 2: generate task
         task_action = """<task>
@@ -774,6 +787,8 @@ def validate_task(env, final_answer=None):
     def test_step_async_query_db_missing_sql(self):
         """query_db without sql argument should return error."""
         env = self._make_env(max_turns=5)
+        # Satisfy exploration sequence: describe_db must be called before query_db
+        env.called_describe_db = True
         mock_orch = MagicMock()
         env.orch = mock_orch
 

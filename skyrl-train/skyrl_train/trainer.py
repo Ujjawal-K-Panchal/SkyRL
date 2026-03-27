@@ -917,7 +917,7 @@ class RayPPOTrainer:
         """
         Dump data to pickle file
         """
-        data_save_dir = Path(self.cfg.trainer.export_path) / "dumped_data"
+        data_save_dir = Path(self.cfg.trainer.export_path) / "dumped_data" / self.cfg.trainer.run_name
         data_save_dir.mkdir(parents=True, exist_ok=True)
         data.save(data_save_dir / f"{file_name}.pkl")
 

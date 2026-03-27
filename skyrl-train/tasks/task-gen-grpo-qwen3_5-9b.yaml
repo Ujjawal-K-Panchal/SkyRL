@@ -64,7 +64,6 @@ envs:
   MAX_INPUT_LENGTH: 64000
   MAX_GENERATE_LENGTH: 8192
   NUM_EPOCHS: 20
-  RUN_ID: ""
   MAX_TASKS: ""
   # Excluded: forums-homes (Zillow 404s), wallst (Excel bugs, empty dataroom)
   ENV_KEYS: "booking,budget,carlisle,outlook,reddit,rops-mail,ticketmaster,zillow"
