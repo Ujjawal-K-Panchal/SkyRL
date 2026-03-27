@@ -108,7 +108,7 @@ dev = [
     "pytest>=6.2.5",
     "pytest-asyncio",
     "pre-commit",
-    "litellm",
+    "litellm!=1.82.7,!=1.82.8",
 ]
 docs = [
     "sphinx>=7.0.0",
@@ -120,7 +120,7 @@ docs = [
 ]
 # TODO(tgriggs): Add `sandboxes` here once available as a package.
 sandboxes = [
-    "litellm[proxy]>=1.67.5",
+    "litellm[proxy]>=1.67.5,!=1.82.7,!=1.82.8",
 ]
 vllm = [
     "vllm==0.17.0",
@@ -159,7 +159,7 @@ flashrl = [
 miniswe = [
     # NOTE (sumanthrh): Needs to be a commit after https://github.com/SWE-agent/mini-swe-agent/commit/4f5d445e99d13b5482478c23508bf2fbf7c0670c
     "mini-swe-agent>=1.12.0",
-    "litellm",
+    "litellm!=1.82.7,!=1.82.8",
 ]
 
 

@@ -208,7 +208,7 @@ setup: |
   uv pip install loguru tqdm ninja tensorboard func_timeout hydra-core==1.3.2 accelerate torchdata omegaconf ray==2.51.1 peft debugpy==1.8.0 hf_transfer datasets==4.0.0 tensordict jaxtyping polars s3fs fastapi uvicorn pybind11 setuptools pyarrow einops
 
   # Step 7: Install runtime deps
-  uv pip install "litellm>=1.75.5" boto3 wandb awscli
+  uv pip install "litellm>=1.75.5,!=1.82.7,!=1.82.8" boto3 wandb awscli
   uv pip install "git+https://github.com/fleet-ai/OpenEnv.git@deniz/fleet-logfire" fleet-python logfire "mcp>=1.0.0"
 
   # Cleanup: Uninstall torchvision (vLLM installs it but text models don't need it)

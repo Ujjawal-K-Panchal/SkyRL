@@ -88,7 +88,7 @@ source .venv/bin/activate
 # FlashAttention 4, and PyTorch 2.10.0
 uv sync --extra vllm
 uv pip install wandb boto3 awscli
-uv pip install "litellm>=1.75.5" fleet-python logfire "mcp>=1.0.0"
+uv pip install "litellm>=1.75.5,!=1.82.7,!=1.82.8" fleet-python logfire "mcp>=1.0.0"
 
 # --- Extra pip packages (installed before extra-setup to avoid dependency downgrades) ---
 if [ -n "$EXTRA_PIP" ]; then

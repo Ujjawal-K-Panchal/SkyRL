@@ -63,7 +63,7 @@ dependencies=[
   "wandb",
   "vllm>=0.8.5",
   "together",
-  "litellm",
+  "litellm!=1.82.7,!=1.82.8",
 ]
 
 [project.optional-dependencies]
