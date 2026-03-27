@@ -53,4 +53,12 @@ echo "export PATH=$CUDA_HOME/bin:\$PATH" >> "$HOME/.cuda_env"
 
 # Verify pinned packages survived dependency resolution
 python -c "import transformers; assert transformers.__version__ == '5.3.0', f'Expected 5.3.0 got {transformers.__version__}'"
+# Ensure torch 2.10.0 — uv pip install can downgrade it during transitive resolution
+TORCH_VER=$(python -c "import torch; print(torch.__version__)")
+echo "torch version after setup: $TORCH_VER"
+if [[ "$TORCH_VER" != 2.10.0* ]]; then
+  echo "WARNING: torch was downgraded to $TORCH_VER, reinstalling 2.10.0+cu128"
+  pip install --force-reinstall --no-deps torch==2.10.0 --index-url https://download.pytorch.org/whl/cu128
+fi
+python -c "import torch; assert torch.__version__.startswith('2.10.0'), f'Expected 2.10.0 got {torch.__version__}'"
 python -c "import torch; import flash_attn_2_cuda; print('flash_attn CUDA extension OK')"
